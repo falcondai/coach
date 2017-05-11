@@ -1,17 +1,33 @@
 import time, os
+from pathos.multiprocessing import ProcessingPool
 
 class Harness(object):
     def __init__(self, func, sampler):
-        self.current_id = 0
         self.func = func
         self.sampler = sampler
 
     def execute(self):
         arg_value_dict = self.sampler.sample()
-        self.current_id += 1
         return self.func(**arg_value_dict)
 
+    def execute_batch(self, n_samples):
+        for _ in xrange(n_samples):
+            self.execute()
+
 SerialHarness = Harness
+
+class PoolHarness(Harness):
+    def __init__(self, func, sampler, n_processes):
+        super(PoolHarness, self).__init__(func, sampler)
+        self.n_processes = n_processes
+
+    def execute_batch(self, n_samples):
+        self.pool = ProcessingPool(self.n_processes)
+        for _ in xrange(n_samples):
+            arg_value_dict = self.sampler.sample()
+            self.pool.apipe(self.func, **arg_value_dict)
+        self.pool.close()
+        self.pool.join()
 
 class Sampler(object):
     def __init__(self, random_variables):

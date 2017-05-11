@@ -7,6 +7,7 @@ hyperparameter search for machine learning. A universal CLI tool that aims to si
   - random search
 - support execution methods:
   - serial
+  - parallel worker pool
 - support argument distributions:
   - uniform
   - gaussian
@@ -23,12 +24,13 @@ For random parameter search, we sample values for each argument according to the
 example:
 ```bash
 $ ./random_cli.py -n 10 \
+  -p 2 \
   -d discrete_arg a 0.1 b 0.9 \
   -u uniform_arg1 0 10 -u uniform_arg2 10 100 \
   -g gaussian_arg 0 1 \
-  'python train.py --max_iter 100'
+  -c 'python train.py --max_iter 100'
 ```
-This will serially execute 10 sampled commands. One of them might be
+This will execute 10 sampled commands in a parallel worker pool of size 2. One of the executed command might be
 ```bash
 python train.py --max_iter 100 --gaussian_arg -1.71480724721 --uniform_arg2 25.1213987881 --uniform_arg1 3.91206703391 --discrete_arg b
 ```
