@@ -13,6 +13,7 @@ hyperparameter search for machine learning. A universal CLI tool that aims to si
   - gaussian
   - log-uniform
   - discrete
+  - uniform discrete (for convenience)
 - write sampled commands to file
 
 

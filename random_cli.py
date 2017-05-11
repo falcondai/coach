@@ -21,6 +21,7 @@ if __name__ == '__main__':
     parser.add_argument('-g', '--gaussian', nargs=3, metavar=('full_argument_name', 'mean', 'variance'), action='append', help='normally distributed input values')
     parser.add_argument('-l', '--log-uniform', nargs=3, metavar=('full_argument_name', 'lower_bound', 'upper_bound'), action='append', help='log uniformly distributed input values')
     parser.add_argument('-d', '--discrete', nargs='+', action='append', help='full argument name, value_1, likelihood for value_1, value_2, ... . for multinomially distributed input values')
+    parser.add_argument('-k', '--uniform-discrete', nargs='+', action='append', help='full argument name, value_1, value_2, ... . for uniformly distributed discrete input values')
 
     args = parser.parse_args()
 
@@ -45,6 +46,13 @@ if __name__ == '__main__':
         for arg_tuple in args.discrete:
             name = arg_tuple[0]
             rv = RandomVariable(name, Discrete.parse(arg_tuple[1:]))
+            rvs.append(rv)
+    if args.uniform_discrete is not None:
+        for arg_tuple in args.uniform_discrete:
+            name = arg_tuple[0]
+            n_values = len(arg_tuple[1:])
+            value_prob_dict = dict([(value, 1. / n_values) for value in arg_tuple[1:]])
+            rv = RandomVariable(name, Discrete(value_prob_dict))
             rvs.append(rv)
 
     if args.save_cmds_to is not None:
