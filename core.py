@@ -25,6 +25,8 @@ class PoolHarness(Harness):
         self.pool = ProcessingPool(self.n_processes)
         for _ in xrange(n_samples):
             arg_value_dict = self.sampler.sample()
+            # XXX so the timestamp log dir can be distinct
+            time.sleep(0.1)
             self.pool.apipe(self.func, **arg_value_dict)
         self.pool.close()
         self.pool.join()
