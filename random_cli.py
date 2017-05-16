@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import numpy as np
-import os, sys, pickle
+import os, pickle
 from util import system_exec
 from distributions import RandomVariable, Uniform, Gaussian, Discrete, LogUniform
 from core import SerialHarness, PoolHarness, LogDirSampler
@@ -56,9 +56,12 @@ if __name__ == '__main__':
             rvs.append(rv)
 
     if args.save_cmds_to is not None:
-        fo = open(args.save_cmds_to, 'a')
+        save_dir = os.path.dirname(args.save_cmds_to)
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        fo = args.save_cmds_to
     else:
-        fo = sys.stdout
+        fo = None
     sampler = LogDirSampler(rvs, log_dir_argument_name=args.log_arg, base_log_dir=args.base_log_dir)
     f = lambda **kwargs: system_exec(args.command, fo, **kwargs)
     harness = SerialHarness(f, sampler) if args.pool_size == 1 else PoolHarness(f, sampler, args.pool_size)
