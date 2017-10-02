@@ -1,3 +1,9 @@
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
+
+from six.moves import xrange
+
 import time, os
 from pathos.multiprocessing import ProcessingPool
 
@@ -64,7 +70,7 @@ if __name__ == '__main__':
     from distributions import Uniform, RandomVariable
 
     def f(x):
-        print 'hi', x
+        print('hi', x)
     x = RandomVariable('x', Uniform(0, 1))
     s = Sampler([x])
     h = SerialHarness(f, s)
