@@ -10,18 +10,18 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--command', help='base command string')
-    parser.add_argument('-n', '--n-samples', default=4, type=int, help='number of experiments to run')
-    parser.add_argument('-s', '--save-cmds-to', help='saves sampled commands to a file')
-    parser.add_argument('--log-arg', help='the log directory argument name')
-    parser.add_argument('-b', '--base-log-dir', default='/tmp', help='the base directory for log files')
-    parser.add_argument('-p', '--pool-size', type=int, default=1, help='the size of the worker pool, i.e. how many commands are executed in parallel')
+    parser.add_argument('-c', '--command', help='Base command string.')
+    parser.add_argument('-n', '--n-samples', default=4, type=int, help='Number of experiments to run.')
+    parser.add_argument('-s', '--save-cmds-to', default='./last_coach_runs.log', help='Saves sampled commands to a file.')
+    parser.add_argument('--log-arg', help='The log directory argument name.')
+    parser.add_argument('-b', '--base-log-dir', default='/tmp', help='The base directory for log files.')
+    parser.add_argument('-p', '--pool-size', type=int, default=1, help='The size of the worker pool, i.e. how many commands are executed in parallel.')
 
-    parser.add_argument('-u', '--uniform', nargs=3, metavar=('full_argument_name', 'lower_bound', 'upper_bound'), action='append', help='uniformly distributed input values')
-    parser.add_argument('-g', '--gaussian', nargs=3, metavar=('full_argument_name', 'mean', 'variance'), action='append', help='normally distributed input values')
-    parser.add_argument('-l', '--log-uniform', nargs=3, metavar=('full_argument_name', 'lower_bound', 'upper_bound'), action='append', help='log uniformly distributed input values')
-    parser.add_argument('-d', '--discrete', nargs='+', action='append', help='full argument name, value_1, likelihood for value_1, value_2, ... . for multinomially distributed input values')
-    parser.add_argument('-k', '--uniform-discrete', nargs='+', action='append', help='full argument name, value_1, value_2, ... . for uniformly distributed discrete input values')
+    parser.add_argument('-u', '--uniform', nargs=3, metavar=('full_argument_name', 'lower_bound', 'upper_bound'), action='append', help='Uniformly distributed input values.')
+    parser.add_argument('-g', '--gaussian', nargs=3, metavar=('full_argument_name', 'mean', 'variance'), action='append', help='Normally distributed input values.')
+    parser.add_argument('-l', '--log-uniform', nargs=3, metavar=('full_argument_name', 'lower_bound', 'upper_bound'), action='append', help='Log uniformly distributed input values.')
+    parser.add_argument('-d', '--discrete', nargs='+', action='append', help='Full argument name, value_1, likelihood for value_1, value_2, ... . for multinomially distributed input values.')
+    parser.add_argument('-k', '--uniform-discrete', nargs='+', action='append', help='Full argument name, value_1, value_2, ... . for uniformly distributed discrete input values.')
 
     args = parser.parse_args()
 
