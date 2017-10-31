@@ -5,7 +5,6 @@ from __future__ import absolute_import
 from six.moves import xrange
 
 import time, os
-from pathos.multiprocessing import ProcessingPool
 
 class Harness(object):
     def __init__(self, func, sampler):
@@ -28,6 +27,8 @@ class PoolHarness(Harness):
         self.n_processes = n_processes
 
     def execute_batch(self, n_samples):
+        # Conditional import
+        from pathos.multiprocessing import ProcessingPool
         self.pool = ProcessingPool(self.n_processes)
         for _ in xrange(n_samples):
             arg_value_dict = self.sampler.sample()
