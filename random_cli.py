@@ -3,7 +3,7 @@
 import numpy as np
 import os, pickle
 from util import system_exec
-from distributions import RandomVariable, Uniform, Gaussian, Discrete, LogUniform
+from distributions import RandomVariable, Uniform, UniformInt, Gaussian, Discrete, LogUniform
 from core import SerialHarness, PoolHarness, LogDirSampler
 
 if __name__ == '__main__':
@@ -18,6 +18,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--pool-size', type=int, default=1, help='The size of the worker pool, i.e. how many commands are executed in parallel.')
 
     parser.add_argument('-u', '--uniform', nargs=3, metavar=('full_argument_name', 'lower_bound', 'upper_bound'), action='append', help='Uniformly distributed input values.')
+    parser.add_argument('-ui', '--uniform-int', nargs=3, metavar=('full_argument_name', 'lower_bound', 'upper_bound'), action='append', help='Uniformly distributed *integral* input values.')
     parser.add_argument('-g', '--gaussian', nargs=3, metavar=('full_argument_name', 'mean', 'variance'), action='append', help='Normally distributed input values.')
     parser.add_argument('-l', '--log-uniform', nargs=3, metavar=('full_argument_name', 'lower_bound', 'upper_bound'), action='append', help='Log uniformly distributed input values.')
     parser.add_argument('-d', '--discrete', nargs='+', action='append', help='Full argument name, value_1, likelihood for value_1, value_2, ... . for multinomially distributed input values.')
@@ -30,22 +31,27 @@ if __name__ == '__main__':
     if args.uniform is not None:
         for arg_tuple in args.uniform:
             name = arg_tuple[0]
-            rv = RandomVariable(name, Uniform.parse(arg_tuple[1:]))
+            rv = RandomVariable(name, Uniform(**Uniform.parse(arg_tuple[1:])))
+            rvs.append(rv)
+    if args.uniform_int is not None:
+        for arg_tuple in args.uniform_int:
+            name = arg_tuple[0]
+            rv = RandomVariable(name, UniformInt(**UniformInt.parse(arg_tuple[1:])))
             rvs.append(rv)
     if args.gaussian is not None:
         for arg_tuple in args.gaussian:
             name = arg_tuple[0]
-            rv = RandomVariable(name, Gaussian.parse(arg_tuple[1:]))
+            rv = RandomVariable(name, Gaussian(**Gaussian.parse(arg_tuple[1:])))
             rvs.append(rv)
     if args.log_uniform is not None:
         for arg_tuple in args.log_uniform:
             name = arg_tuple[0]
-            rv = RandomVariable(name, LogUniform.parse(arg_tuple[1:]))
+            rv = RandomVariable(name, LogUniform(**LogUniform.parse(arg_tuple[1:])))
             rvs.append(rv)
     if args.discrete is not None:
         for arg_tuple in args.discrete:
             name = arg_tuple[0]
-            rv = RandomVariable(name, Discrete.parse(arg_tuple[1:]))
+            rv = RandomVariable(name, Discrete(**Discrete.parse(arg_tuple[1:])))
             rvs.append(rv)
     if args.uniform_discrete is not None:
         for arg_tuple in args.uniform_discrete:

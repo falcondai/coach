@@ -48,7 +48,16 @@ class Uniform(Distribution):
         lower, upper = args
         lower = float(lower)
         upper = float(upper)
-        return Uniform(lower, upper)
+        return dict(lower=lower, upper=upper)
+
+
+class UniformInt(Uniform):
+    '''Uniform distribution of integers bounded by an interval.'''
+    def __init__(self, lower, upper):
+        super(UniformInt, self).__init__(lower, upper)
+
+    def sample(self):
+        return int(super(UniformInt, self).sample())
 
 
 class Gaussian(Distribution):
@@ -65,7 +74,7 @@ class Gaussian(Distribution):
         mean, variance = args
         mean = float(mean)
         variance = float(variance)
-        return Gaussian(mean, variance)
+        return dict(mean=mean, variance=variance)
 
 
 class LogUniform(Distribution):
@@ -82,7 +91,7 @@ class LogUniform(Distribution):
         lower, upper = args
         lower = float(lower)
         upper = float(upper)
-        return Uniform(lower, upper)
+        return dict(lower=lower, upper=upper)
 
 
 class Discrete(Distribution):
@@ -97,12 +106,12 @@ class Discrete(Distribution):
     @staticmethod
     def parse(args):
         assert len(args) % 2 == 0, '%r must form pairs of (x, p_x).' % args
-        n_pairs = len(args) / 2
+        n_pairs = len(args) // 2
         value_prob_dict = {}
         for i in xrange(n_pairs):
             x, px = args[2 * i:2 * i + 2]
             value_prob_dict[x] = float(px)
-        return Discrete(value_prob_dict)
+        return dict(value_prob_dict=value_prob_dict)
 
 
 if __name__ == '__main__':
